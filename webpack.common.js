@@ -6,7 +6,7 @@ const webpack = require('webpack');
 
 module.exports = {
   mode: 'development',
-  entry: './src/index.js',
+  entry: './src/index',
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist')
@@ -39,8 +39,19 @@ module.exports = {
             },
             "sass-loader"
         ]
+      },
+      {
+        test: /\.tsx?$/,
+        loader: "ts-loader"
+      },
+      {
+        test: /\.pug$/,
+        use: ["pug-loader"]
       }
     ]
+  },
+  resolve: {
+    extensions: [".ts",".js"]    // 自动补全，很重要
   },
   plugins: [
     new CleanWebpackPlugin(),
@@ -51,7 +62,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       title: '首頁',
       filename: 'index.html',
-      template: './src/index.html'
+      template: './src/pages/index.pug'
     })
   ]
 }

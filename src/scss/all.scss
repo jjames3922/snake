@@ -1,4 +1,7 @@
-.a {
-  display: grid;
-  color: red;
-}
+// base 全站設定
+@import "./base/variable";
+@import "./base/reset";
+@import "./base/typography";
+
+// layout
+@import "./layout/layout";
