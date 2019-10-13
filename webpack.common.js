@@ -6,9 +6,14 @@ const webpack = require('webpack');
 
 module.exports = {
   mode: 'development',
-  entry: './src/index',
+  // entry: './src/index',
+  entry: {
+    index: './src/index',
+    play: './src/js/play'
+  },
   output: {
-    filename: 'bundle.js',
+    filename: 'bundle.[name].js',
+    chunkFilename: '[name].shared.js',
     path: path.resolve(__dirname, 'dist')
   },
   module: {
@@ -46,7 +51,7 @@ module.exports = {
     ]
   },
   resolve: {
-    extensions: [".ts",".js"]    // 自动补全，很重要
+    extensions: [".ts",".js"]
   },
   plugins: [
     new CleanWebpackPlugin(),
@@ -57,7 +62,14 @@ module.exports = {
     new HtmlWebpackPlugin({
       title: '首頁',
       filename: 'index.html',
-      template: './src/pages/index.pug'
+      template: './src/pages/index.pug',
+      chunks: ['index'],
+    }),
+    new HtmlWebpackPlugin({
+      title: '遊戲中',
+      filename: 'play.html',
+      template: './src/pages/play.pug',
+      chunks: ['play']
     })
   ]
 }

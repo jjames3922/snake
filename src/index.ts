@@ -1,2 +1,4 @@
 import './scss/all.scss';
-import './test';
+
+// 首頁監聽
+import './js/start';

@@ -1,4 +1,15 @@
 .wrap {
     height: 100vh;
     background: $color-primary;
+    display: grid;
+    justify-content: center;
+    align-items: center;
+}
+
+.color-light {
+    color: white;
+}
+
+.bg-dark {
+    background: black;
 }
