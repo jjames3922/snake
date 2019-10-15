@@ -5,7 +5,7 @@
     display: grid;
     grid-template-rows: repeat(16, 1fr);
     grid-template-columns: repeat(28, 1fr);
-
+    position: relative;
 
     &__item {
         border-right: 1px solid $color-primary-light;
