@@ -37,10 +37,14 @@ export class GameMap {
     }
   }
 
-  draw (snake: Snake) {
+  drawSnake (snake: Snake) {
     const snakeBody = snake.getSnakeBody()
     snakeBody.forEach(element => {
       this._gameMap.appendChild(element);
     })
+  }
+
+  drawFood (food: HTMLElement) {
+    this._gameMap.appendChild(food);
   }
 }
