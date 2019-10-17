@@ -70,6 +70,12 @@ module.exports = {
       filename: 'play.html',
       template: './src/pages/play.pug',
       chunks: ['play']
+    }),
+    new HtmlWebpackPlugin({
+      title: '遊戲結束',
+      filename: 'end.html',
+      template: './src/pages/end.pug',
+      chunks: ['end']
     })
   ]
 }

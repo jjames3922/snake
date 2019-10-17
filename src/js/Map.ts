@@ -1,10 +1,18 @@
 import { Snake } from './Snake';
 
-type StartPoint = {
-  x: number,
-  y: number
+// snake 的方向
+enum Direction {
+  Up = 1,
+  Down,
+  Right,
+  Left
 }
 
+interface SnakeBodyLocation {
+  x: number,
+  y: number,
+  direction?: Direction, // 現在行進方向
+}
 export class GameMap {
   private _row: number;
   private _col: number;
@@ -53,5 +61,24 @@ export class GameMap {
   // 繪製分數
   drawScore (score: number) {
     this._score.textContent = score.toString();
+  }
+
+  // 檢查蛇移動時是否有觸碰到地圖的邊界, 如果有的話由地圖回傳給蛇一個新的座標
+  checkSnakeMove (snakeBodyLocation: SnakeBodyLocation) {
+    if (
+      snakeBodyLocation.x < 0 ||
+      snakeBodyLocation.x > this._col -1 ||
+      snakeBodyLocation.y < 0 ||
+      snakeBodyLocation.y > this._row -1) {
+        if (snakeBodyLocation.direction === Direction.Up) {
+          snakeBodyLocation.y = this._row - 1;
+        } else if (snakeBodyLocation.direction === Direction.Down) {
+          snakeBodyLocation.y = 0;
+        } else if (snakeBodyLocation.direction === Direction.Left) {
+          snakeBodyLocation.x = this._col - 1;
+        } else if (snakeBodyLocation.direction === Direction.Right) {
+          snakeBodyLocation.x = 0;
+        }
+    }
   }
 }

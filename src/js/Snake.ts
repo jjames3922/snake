@@ -127,8 +127,10 @@ export class Snake {
       }
       this._snakeBodyLocation.unshift(snakeHead); // 將新的頭的位置加入到陣列開頭
       this._snakeBodyLocation.forEach((location, i) => { // 刷新所有身體位置
+        this._gameMap.checkSnakeMove(location); // 檢查蛇的身體是否有超出地圖, 由地圖將蛇的身體轉回地圖
         this._snakeBody[i].style.transform = `translate(${location.x * 40}px, ${location.y * 40}px)`;
       });
+
       this.checkEatFood(); // 檢查是否在每一次移動有吃到食物
       this.checkCollision(); // 檢查是否有碰撞到自己身體
       this._gameMap.drawSnake(this);
