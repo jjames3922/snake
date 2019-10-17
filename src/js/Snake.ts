@@ -71,53 +71,34 @@ export class Snake {
 
   private setKeyboardListener() {
     window.addEventListener('keyup', e => {
-      // const snakeHead = this._snakeBodyLocation[0];
-      // this._previousDirection = snakeHead.direction; // 更改頭的位置
+      // 如果 startTime 是 0 就在使用者點下按鍵時，將開始時間設定成「現在時間」
+      if (this._startTime === 0) {
+        this._startTime = new Date().getTime();
+      }
+      const snakeHead = this._snakeBodyLocation[0];
       switch (e.key) {
           case 'ArrowRight':
-            // this.checkChangeDirection(Direction.Right);
-            // snakeHead.direction = Direction.Right; // 更改頭的位置
-            // if (!snakeHead.previousDirection) {
-            //   snakeHead.previousDirection = snakeHead.direction; // 更改頭的位置
-            // }
-            if (this._startTime === 0) {
-              this._startTime = new Date().getTime();
+            if (snakeHead.direction !== Direction.Left) {
+              snakeHead.direction = Direction.Right; // 將 snake head 設定為當下點下的方向
+              requestAnimationFrame(this.move.bind(this));  
             }
-            this._currentDirection = Direction.Right;
-            requestAnimationFrame(this.move.bind(this));
             break;
           case 'ArrowUp':
-            // this.checkChangeDirection(Direction.Up);
-            // snakeHead.direction = Direction.Up; // 更改頭的位置
-            // if (!snakeHead.previousDirection) {
-            //   snakeHead.previousDirection = snakeHead.direction; // 更改頭的位置
-            // }
-            if (this._startTime === 0) {
-              this._startTime = new Date().getTime();
+            if (snakeHead.direction !== Direction.Down) {
+              snakeHead.direction = Direction.Up; // 將 snake head 設定為當下點下的方向
+              requestAnimationFrame(this.move.bind(this));  
             }
-            this._currentDirection = Direction.Up;
-            requestAnimationFrame(this.move.bind(this));
             break;
           case 'ArrowLeft':
-            // this.checkChangeDirection(Direction.Left);
-            // snakeHead.direction = Direction.Left; // 更改頭的位置
-            // if (!snakeHead.previousDirection) {
-            //   snakeHead.previousDirection = snakeHead.direction; // 更改頭的位置
-            // }
-            if (this._startTime === 0) {
-              this._startTime = new Date().getTime();
+            if (snakeHead.direction !== Direction.Right) {
+              snakeHead.direction = Direction.Left; // 將 snake head 設定為當下點下的方向
+              requestAnimationFrame(this.move.bind(this));  
             }
-            this._currentDirection = Direction.Left;
-            requestAnimationFrame(this.move.bind(this));
             break;
           case 'ArrowDown':
-            // this.checkChangeDirection(Direction.Down);
-            // snakeHead.direction = Direction.Down; // 更改頭的位置
-            // if (!snakeHead.previousDirection) {
-            //   snakeHead.previousDirection = snakeHead.direction; // 更改頭的位置
-            // }
-            if (this._startTime === 0) {
-              this._startTime = new Date().getTime();
+            if (snakeHead.direction !== Direction.Up) {
+              snakeHead.direction = Direction.Down; // 將 snake head 設定為當下點下的方向
+              requestAnimationFrame(this.move.bind(this));  
             }
             break;
           default:
@@ -128,36 +109,13 @@ export class Snake {
 
   public move () {
     // 每 500 秒執行一次
-    if (new Date().getTime() - this._startTime > 500) {
+    if (new Date().getTime() - this._startTime > 150) {
       this._startTime = new Date().getTime();
-      const snakeHead = this._snakeBodyLocation[0];
-      this._snakeBodyLocation.forEach((location, i) => {
-        if (i > 0) {
-          location.direction = this._snakeBodyLocation[i - 1].direction;  
-          if (location.direction === Direction.Down) {
-            location.y++;
-          } else if (location.direction === Direction.Up) {
-            location.y--;
-          } else if (location.direction === Direction.Left) {
-            location.x--;
-          } else if (location.direction === Direction.Right) {
-            location.x++;
-          }
-          this._snakeBody[i].style.transform = `translate(${location.x * 40}px, ${location.y * 40}px)`;
-        }
-        // if (!this._isChangeDirection) {
-        // if (i > 0) {
-        //   location.direction = this._previousDirection;
-        // }
-        // }
-        // 如果不是頭，那把身體行走的方向設定為前一個部位前進的方向
-        // if (i !== 0) {
-        //   location.direction = this._snakeBodyLocation[i - 1].previousDirection;
-        // }
-        // 檢查分數
-      });
-      
-      snakeHead.direction = this._currentDirection;
+      const snakeHead = { ...this._snakeBodyLocation[0] };
+      const snakeBodyLocationLength = this._snakeBodyLocation.length;
+      this._snakeBodyLocation.splice(snakeBodyLocationLength - 1); // 截掉最後一個蛇的身體
+
+      // 更換掉頭的位置
       if (snakeHead.direction === Direction.Down) {
         snakeHead.y++;
       } else if (snakeHead.direction === Direction.Up) {
@@ -167,7 +125,10 @@ export class Snake {
       } else if (snakeHead.direction === Direction.Right) {
         snakeHead.x++;
       }
-      this._snakeBody[0].style.transform = `translate(${snakeHead.x * 40}px, ${snakeHead.y * 40}px)`;
+      this._snakeBodyLocation.unshift(snakeHead); // 將新的頭的位置加入到陣列開頭
+      this._snakeBodyLocation.forEach((location, i) => { // 刷新所有身體位置
+        this._snakeBody[i].style.transform = `translate(${location.x * 40}px, ${location.y * 40}px)`;
+      });
       this.checkEatFood(); // 檢查是否在每一次移動有吃到食物
       this._gameMap.drawSnake(this);
     } 
@@ -214,6 +175,7 @@ export class Snake {
 
   addScore () {
     this._score++;
+    this._gameMap.drawScore(this._score);
   }
 
   checkEatFood () {
@@ -222,6 +184,7 @@ export class Snake {
     if (snakeHead.x === foodLocation.x && snakeHead.y === foodLocation.y) {
       this.addSnakeBody();
       this.addScore();
+      this._food.init(); // 重新產生一次食物
     }
   }
 }
