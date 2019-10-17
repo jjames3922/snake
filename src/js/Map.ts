@@ -9,6 +9,7 @@ export class GameMap {
   private _row: number;
   private _col: number;
   private _gameMap: HTMLElement
+  private _score: HTMLElement
 
   constructor (row: number, col: number) {
     this._row = row;
@@ -16,6 +17,7 @@ export class GameMap {
   }
 
   init () {
+    this._score = document.querySelector('#playScore');
     const fragment = document.createDocumentFragment();
     this._gameMap = document.querySelector('.playMap');
     for (let i = 0; i < 16; i++) {
@@ -46,5 +48,10 @@ export class GameMap {
 
   drawFood (food: HTMLElement) {
     this._gameMap.appendChild(food);
+  }
+
+  // 繪製分數
+  drawScore (score: number) {
+    this._score.textContent = score.toString();
   }
 }

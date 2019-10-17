@@ -25,7 +25,7 @@ export class Food {
         this.generateFood();
     }
 
-    generateFoodLocation () {
+    private generateFoodLocation () {
         const snakeBodyLocation = this._snake.getSnakeBodyLocation();
         const startPoint = this._gameMap.generateStartPoint();
         const result = snakeBodyLocation.find(item => {
@@ -39,8 +39,10 @@ export class Food {
         }
     }
 
-    generateFood () {
-        this._foodElement = document.createElement('div');
+    private generateFood () {
+        if (!this._foodElement) {
+            this._foodElement = document.createElement('div');
+        }
         this._foodElement.style.position = 'absolute';
         this._foodElement.style.background = 'red';
         this._foodElement.style.width = `${this._foodSideLength}px`;
@@ -48,7 +50,7 @@ export class Food {
         this._foodElement.style.transform = `translate(${this._x * 40}px, ${this._y * 40}px)`;
         this._gameMap.drawFood(this._foodElement);
     }
-
+    
     public getFoodLocation(): FoodLocation {
         return {
             x: this._x,
