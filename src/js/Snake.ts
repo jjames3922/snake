@@ -130,8 +130,9 @@ export class Snake {
         this._snakeBody[i].style.transform = `translate(${location.x * 40}px, ${location.y * 40}px)`;
       });
       this.checkEatFood(); // 檢查是否在每一次移動有吃到食物
+      this.checkCollision(); // 檢查是否有碰撞到自己身體
       this._gameMap.drawSnake(this);
-    } 
+    }
     requestAnimationFrame(this.move.bind(this));
   }
 
@@ -186,5 +187,17 @@ export class Snake {
       this.addScore();
       this._food.init(); // 重新產生一次食物
     }
+  }
+
+  checkCollision () {
+    // 檢查有沒有撞到自己
+    const snakeHead = this._snakeBodyLocation[0];
+    this._snakeBodyLocation.forEach((location, i) => {
+      if (i > 0) {
+        if (location.x === snakeHead.x && location.y === snakeHead.y) {
+          document.location.href = './end.html'
+        }
+      }
+    })
   }
 }
