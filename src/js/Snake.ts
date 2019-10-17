@@ -14,7 +14,6 @@ interface SnakeBodyLocation {
   x: number,
   y: number,
   direction?: Direction, // 現在行進方向
-  previousDirection?: Direction // 上一個方向
 }
 
 export class Snake {
@@ -25,8 +24,6 @@ export class Snake {
   private _startTime: number; // 紀錄蛇開始動的時間, 並用於 requestAnimationFrame
   private _food: Food; // 食物的 instance
   private _score: number; // 吃的分數
-  private _isChangeDirection: Boolean; // 是否有變換方向
-  private _currentDirection: Direction; // 目前行進方向
 
   constructor (gameMap: GameMap) {
     this._gameMap = gameMap;
@@ -35,12 +32,9 @@ export class Snake {
     this._snakeBodyLocation = [];
     this._startTime = 0;
     this._score = 0;
-    this._isChangeDirection = false;
   }
 
   init () {
-    console.log('init', this._snakeBodyLocation);
-    
     const startPoint = this._gameMap.generateStartPoint(); // 產生蛇的預設位置
 
     // 預設產生蛇的頭
@@ -125,19 +119,11 @@ export class Snake {
             if (this._startTime === 0) {
               this._startTime = new Date().getTime();
             }
-            this._currentDirection = Direction.Down;
-            requestAnimationFrame(this.move.bind(this, Direction.Down));
             break;
           default:
               break;
       }
     })
-  }
-
-  private checkChangeDirection (direction) {
-    if (this._snakeBodyLocation[0].direction !== direction) {
-      this._isChangeDirection = true;
-    }
   }
 
   public move () {
@@ -183,7 +169,6 @@ export class Snake {
       }
       this._snakeBody[0].style.transform = `translate(${snakeHead.x * 40}px, ${snakeHead.y * 40}px)`;
       this.checkEatFood(); // 檢查是否在每一次移動有吃到食物
-      this._isChangeDirection = false;
       this._gameMap.drawSnake(this);
     } 
     requestAnimationFrame(this.move.bind(this));
@@ -222,7 +207,6 @@ export class Snake {
         direction: Direction.Right
       });
     }
-    console.log('add new', this._snakeBodyLocation);
     lastBody = this._snakeBodyLocation[this._snakeBodyLocation.length - 1];
     newPointDiv.style.transform = `translate(${lastBody.x * 40}px, ${lastBody.y * 40}px)`;
     this._snakeBody.push(newPointDiv);
