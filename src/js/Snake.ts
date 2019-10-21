@@ -197,6 +197,7 @@ export class Snake {
     this._snakeBodyLocation.forEach((location, i) => {
       if (i > 0) {
         if (location.x === snakeHead.x && location.y === snakeHead.y) {
+          localStorage.setItem('snake-score', this._score.toString());
           document.location.href = './end.html'
         }
       }

@@ -9,7 +9,8 @@ module.exports = {
   // entry: './src/index',
   entry: {
     index: './src/index',
-    play: './src/js/play'
+    play: './src/js/play',
+    end: './src/js/end'
   },
   output: {
     filename: 'bundle.[name].js',

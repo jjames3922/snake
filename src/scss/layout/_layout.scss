@@ -1,10 +1,13 @@
 .wrap {
     height: 100vh;
-    background: $color-primary;
     display: grid;
     justify-content: center;
     align-items: center;
     position: relative;
+}
+
+.color-dark {
+    color: black;
 }
 
 .color-light {
@@ -13,4 +16,8 @@
 
 .bg-dark {
     background: black;
+}
+
+.bg-primary {
+    background: #9AC502;
 }
